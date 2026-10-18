@@ -17,6 +17,10 @@ export default function handler(req, res) {
 
 	if (req.method === "OPTIONS") {
 		for (const [k, v] of Object.entries(CORS)) res.setHeader(k, v);
+		res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
+		const asked = req.headers["access-control-request-headers"];
+		if (asked) res.setHeader("Access-Control-Allow-Headers", asked);
+		res.setHeader("Access-Control-Max-Age", "7200");
 		res.statusCode = 204;
 		res.end();
 		return;
