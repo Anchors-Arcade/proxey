@@ -47,15 +47,10 @@ form.addEventListener("submit", async (event) => {
 
 	const url = search(address.value, searchEngine.value);
 
-	let wispUrl =
-		(location.protocol === "https:" ? "wss" : "ws") +
-		"://" +
-		location.host +
-		"/wisp/";
-	if ((await connection.getTransport()) !== "/libcurl/index.mjs") {
-		await connection.setTransport("/libcurl/index.mjs", [
-			{ websocket: wispUrl },
-		]);
+	// Vercel-only setup: Bare transport talking to /api/bare/ (a Vercel function on this same site).
+	const bareUrl = location.origin + "/api/bare/";
+	if ((await connection.getTransport()) !== "/baremod/index.mjs") {
+		await connection.setTransport("/baremod/index.mjs", [bareUrl]);
 	}
 	const frame = scramjet.createFrame();
 	frame.frame.id = "sj-frame";
